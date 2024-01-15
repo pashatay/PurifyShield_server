@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS  # Import CORS
 from werkzeug.utils import secure_filename
 from anonymizer import anonymize_file
 import os
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 UPLOAD_FOLDER = "./uploads"
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
-CONFIG_FILE = "./anonymization_config.json"  # Configuration file name
+CONFIG_FILE = "./anonymization_config.json"
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
