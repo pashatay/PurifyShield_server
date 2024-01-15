@@ -8,32 +8,36 @@ app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = "./uploads"
-ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
+ALLOWED_EXTENSIONS = {"csv", "xlsx"}
 CONFIG_FILE = "./anonymization_config.json"
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/upload', methods=['POST'])
+
+@app.route("/upload", methods=["POST"])
 def upload_file():
     try:
-        if 'file' not in request.files:
-            return jsonify({'message': 'No file part in the request'}), 400
+        if "file" not in request.files:
+            return jsonify({"message": "No file part in the request"}), 400
 
-        file = request.files['file']
+        file = request.files["file"]
 
-        if file.filename == '':
-            return jsonify({'message': 'No file selected for uploading'}), 400
+        if file.filename == "":
+            return jsonify({"message": "No file selected for uploading"}), 400
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            input_file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            output_file_path = os.path.join(app.config['UPLOAD_FOLDER'], "anonymized_" + filename)
+            input_file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            output_file_path = os.path.join(
+                app.config["UPLOAD_FOLDER"], "anonymized_" + filename
+            )
             config_path = os.path.join(CONFIG_FILE)
 
             file.save(input_file_path)
@@ -48,9 +52,10 @@ def upload_file():
 
             return response
         else:
-            return jsonify({'message': 'Unsupported file format'}), 400
+            return jsonify({"message": "Unsupported file format"}), 400
     except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return jsonify({"message": str(e)}), 500
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)

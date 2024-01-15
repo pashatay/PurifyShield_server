@@ -2,9 +2,10 @@ import pandas as pd
 from anonymizer_helper import DataAnonymizer
 import json
 
+
 def anonymize_file(input_file_path, output_file_path, config_path):
     # Load the configuration
-    with open(config_path, 'r') as file:
+    with open(config_path, "r") as file:
         config = json.load(file)
 
     # Create an instance of DataAnonymizer
@@ -16,7 +17,9 @@ def anonymize_file(input_file_path, output_file_path, config_path):
     elif input_file_path.endswith((".xls", ".xlsx")):
         data = pd.read_excel(input_file_path)
     else:
-        raise ValueError("Unsupported file format. Only CSV and Excel files are supported.")
+        raise ValueError(
+            "Unsupported file format. Only CSV and Excel files are supported."
+        )
 
     # Prepare the dataframe
     data.columns = data.columns.str.strip().str.lower()
@@ -31,17 +34,21 @@ def anonymize_file(input_file_path, output_file_path, config_path):
             if anonymization_function:
                 anonymized_data[header] = anonymization_function(data[header])
             else:
-                raise ValueError(f"Anonymization function {function_name} not found for column {header}")
+                raise ValueError(
+                    f"Anonymization function {function_name} not found for column {header}"
+                )
         else:
             # Copy the data as is if no anonymization function is specified
             anonymized_data[header] = data[header]
 
     # Save the anonymized data to the output file
-    if output_file_path.endswith('.csv'):
+    if output_file_path.endswith(".csv"):
         anonymized_data.to_csv(output_file_path, index=False)
-    elif output_file_path.endswith(('.xls', '.xlsx')):
+    elif output_file_path.endswith((".xls", ".xlsx")):
         anonymized_data.to_excel(output_file_path, index=False)
     else:
-        raise ValueError("Unsupported output file format. Only CSV and Excel files are supported for output.")
+        raise ValueError(
+            "Unsupported output file format. Only CSV and Excel files are supported for output."
+        )
 
     return output_file_path
