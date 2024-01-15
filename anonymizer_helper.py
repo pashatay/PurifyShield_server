@@ -1,4 +1,5 @@
 import random
+import re
 
 class DataAnonymizer:
     def __init__(self):
@@ -40,23 +41,36 @@ class DataAnonymizer:
     def anonymize_balances(self, series):
         return series.apply(lambda x: round(random.uniform(1, 10000), 2))
 
-    def anonymize_loan_amounts(self, series):
-        return series.apply(lambda x: round(random.uniform(1000, 100000), 2))
-
     def anonymize_interest_rates(self, series):
         return series.apply(lambda x: round(random.uniform(1, 10), 2))
 
     def anonymize_credit_scores(self, series):
         return series.apply(lambda x: random.choice([300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850]))
 
-    def anonymize_investment_details(self, series):
-        return series.apply(lambda x: 'Investment Details')
-
     def anonymize_contact_info(self, series):
-        return series.apply(lambda x: 'Contact Info')
+        def anonymize(item):
+            # Check if the item is an email
+            if re.match(r"[^@]+@[^@]+\.[^@]+", item):
+                return f"user{random.randint(1, 1000)}@example.com"
+            # Check if the item is a phone number
+            elif re.match(r"\d{3}-\d{3}-\d{4}", item):
+                return f"{random.randint(100, 999)}-{random.randint(100, 999)}-{random.randint(1000, 9999)}"
+            else:
+                return 'Unknown Contact'
+
+        return series.apply(anonymize)
 
     def anonymize_addresses(self, series):
-        return series.apply(lambda x: 'Anonymized Address')
+        def generate_address():
+            street_num = random.randint(100, 999)
+            street_name = random.choice(['Main', 'Oak', 'Pine', 'Maple', 'Elm'])
+            street_type = random.choice(['St', 'Ave', 'Blvd', 'Ln', 'Rd'])
+            city = random.choice(['Springfield', 'Rivertown', 'Lakewood', 'Hillside', 'Greenville'])
+            state = random.choice(['CA', 'TX', 'NY', 'FL', 'IL'])
+            zip_code = f"{random.randint(10000, 99999)}"
+            return f"{street_num} {street_name} {street_type}, {city}, {state} {zip_code}"
+
+        return series.apply(lambda _: generate_address())
 
     def anonymize_dates_of_birth(self, series):
         return series.apply(lambda x: f'19{random.randint(50, 99)}-XX-XX')

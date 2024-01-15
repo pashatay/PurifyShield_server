@@ -1,0 +1,18 @@
+{
+    "customer name": "anonymize_customer_names",
+    "ssn": "anonymize_social_security_numbers",
+    "account number": "anonymize_account_numbers",
+    "branch": "anonymize_branch_codes",
+    "account type": "anonymize_account_types",
+    "transaction date": "anonymize_transaction_dates",
+    "transaction type": "anonymize_transaction_types",
+    "transaction amount": "anonymize_transaction_amounts",
+    "balance": "anonymize_balances",
+    "interest rate": "anonymize_interest_rates",
+    "credit score": "anonymize_credit_scores",
+    "dob": "anonymize_dates_of_birth",
+    "phone #": "anonymize_contact_info",
+    "email": "anonymize_contact_info",
+    "home address": "anonymize_addresses"
+  }
+  
