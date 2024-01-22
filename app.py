@@ -7,9 +7,9 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_FOLDER = "./uploads"
-ALLOWED_EXTENSIONS = {"csv", "xlsx"}
-CONFIG_FILE = "./anonymization_config.json"
+UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', './uploads')
+ALLOWED_EXTENSIONS = set(os.getenv('ALLOWED_EXTENSIONS', 'csv,xlsx').split(','))
+CONFIG_FILE = os.getenv('ANONYMIZATION_CONFIG_PATH', './anonymization_config.json')
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
