@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
+from flask_talisman import Talisman
 from werkzeug.utils import secure_filename
 from anonymizer import anonymize_file
 import os
 
 app = Flask(__name__)
 CORS(app)
+Talisman(app) 
 
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', './uploads')
 ALLOWED_EXTENSIONS = set(os.getenv('ALLOWED_EXTENSIONS', 'csv,xlsx').split(','))
